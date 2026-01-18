@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using CanopyViewer.Data;
 using CanopyViewer.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace CanopyViewer.Pages
 {
+    [AllowAnonymous]
     public class LoginModel : PageModel
     {
         private readonly AppDbContext _db;
@@ -36,10 +39,13 @@ namespace CanopyViewer.Pages
                 new Claim(ClaimTypes.Role, user.Role)
             };
 
-            var identity = new ClaimsIdentity(claims, "Cookies");
+            var identity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme);
+
             var principal = new ClaimsPrincipal(identity);
 
-            await HttpContext.SignInAsync("Cookies", principal);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
             return RedirectToPage("/Index");
         }

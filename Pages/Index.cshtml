@@ -8,4 +8,14 @@
     <h1 class="display-4">Welcome</h1>
     <h1>CanopyViewer System Prototype</h1>
     <p>Server running in local development environment</p>
+    <p>User: @User.Identity?.Name</p>
+    <p>Is Authenticated: @User.Identity?.IsAuthenticated</p>
+    <p>Is Admin: @User.IsInRole(CanopyViewer.Models.Role.Admin)</p>
+
+    <ul>
+    @foreach (var claim in User.Claims)
+        {
+            <li>@claim.Type : @claim.Value</li>
+        }
+    </ul>
 </div>

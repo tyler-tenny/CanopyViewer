@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using CanopyViewer.Data;
 using CanopyViewer.Models;
 using CanopyViewer.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,29 +13,44 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
 
 // Cookie authentication for sessions
-builder.Services.AddAuthentication("Cookies").AddCookie("Cookies", options =>
-    {
-        options.LoginPath = "/Login";
-        options.LogoutPath = "/Logout";
-    });
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+    CookieAuthenticationDefaults.AuthenticationScheme, options =>
+        {
+            options.LoginPath = "/Login";
+            options.LogoutPath = "/Logout";
 
-builder.Services.AddAuthorization();
+        });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+    .RequireAuthenticatedUser()
+    .Build();
+});
 
 var app = builder.Build();
 
-// Test user for logins
+// Test users for logins
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-    if (!db.Users.Any())
+    if (db.Users.Count() != 2)
     {
         db.Users.Add(new User
         {
             Username = "admin",
             PasswordHash = PasswordService.Hash("admin123"),
-            Role = "Admin"
+            Role = Role.Admin
         });
+
+        db.Users.Add(new User
+        {
+            Username = "user",
+            PasswordHash = PasswordService.Hash("user123"),
+            Role = Role.User
+        });
+
         db.SaveChanges();
     }
 }
