@@ -11,6 +11,7 @@ namespace CanopyViewer.Services
 
         public static bool Verify(string password, string hash)
         {
+            if (password == null) return false;
             return BCrypt.Net.BCrypt.Verify(password, hash);
         }
     }
