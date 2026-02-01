@@ -1,0 +1,30 @@
+﻿@page
+@model CanopyViewer.Pages.Admin.Users.IndexModel
+@{
+    <h2>User Management</h2>
+
+    <a asp-page="Create" class="btn btn-primary">Create User</a>
+
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Role</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>@user.Username</td>
+                    <td>@user.Role</td>
+                    <td>
+                        <a asp-page="Edit" asp-route-id="@user.Id">Edit</a>
+                        <a asp-page="Delete" asp-route-id="@user.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

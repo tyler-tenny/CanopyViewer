@@ -1,0 +1,39 @@
+﻿@page "{id:int}"
+@model CanopyViewer.Pages.Admin.Users.EditModel
+@{
+
+    <h2>Edit User</h2>
+
+    @if (!ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            @foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <div>@error.ErrorMessage</div>
+            }
+        </div>
+    }
+
+    <form method="post">
+        <div>
+            <label>Username</label>
+            <input asp-for="Input.Username"/>
+        </div>
+
+        <div>
+            <label>Password (leave blank to keep current)</label>
+            <input asp-for="Input.Password" type ="password"/>
+        </div>
+
+        <div>
+            <label>Role</label>
+            <select asp-for="Input.Role">
+                <option>User</option>
+                <option>Admin</option>
+                <option>Viewer</option>
+            </select>
+        </div>
+
+        <button type="submit">Save</button>
+    </form>
+}
