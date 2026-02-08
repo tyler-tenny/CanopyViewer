@@ -1,0 +1,16 @@
+﻿@page "{id:int}"
+@model CanopyViewer.Pages.WorkOrders.DetailsModel
+@{
+    ViewData["Title"] = "WorkOrder Details";
+}
+
+<h2>@Model.workOrder.Title</h2>
+
+<ul class="list-group mb-3">
+    <li class="list-group-item"><strong>Status:</strong> @Model.workOrder.Status</li>
+    <li class="list-group-item"><strong>Assigned To:</strong> @Model.workOrder.AssignedTo</li>
+    <li class="list-group-item"><strong>Description:</strong> @Model.workOrder.Description</li>
+</ul>
+
+<a asp-page="Edit" asp-route-id="@Model.workOrder.Id" class="btn btn-primary">Edit</a>
+<a asp-page="Index" class="btn btn-secondary">Back</a>

@@ -1,0 +1,16 @@
+﻿@page "{id:int}"
+@model CanopyViewer.Pages.Assets.DetailsModel
+@{
+    ViewData["Title"] = "Asset Details";
+}
+
+<h2>@Model.asset.Name</h2>
+
+<ul class="list-group mb-3">
+    <li class="list-group-item"><strong>Type:</strong> @Model.asset.Type</li>
+    <li class="list-group-item"><strong>Status:</strong> @Model.asset.Status</li>
+    <li class="list-group-item"><strong>Location:</strong> @Model.asset.Location</li>
+</ul>
+
+<a asp-page="Edit" asp-route-id="@Model.asset.Id" class="btn btn-primary">Edit</a>
+<a asp-page="Index" class="btn btn-secondary">Back</a>

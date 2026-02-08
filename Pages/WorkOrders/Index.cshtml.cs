@@ -5,10 +5,10 @@ namespace CanopyViewer.Pages.WorkOrders
 {
     public class IndexModel : PageModel
     {
-        public List<WorkOrderRow> Assets { get; set; } = new();
+        public List<WorkOrderRow> WorkOrders { get; set; } = new();
         public void OnGet()
         {
-            Assets = new()
+            WorkOrders = new()
             {
                 new WorkOrderRow
                 {

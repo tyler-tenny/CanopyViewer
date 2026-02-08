@@ -1,4 +1,37 @@
 ﻿@page
 @model CanopyViewer.Pages.WorkOrders.CreateModel
 @{
+    ViewData["Title"] = "New WorkOrder";
 }
+
+<h2>New WorkOrder</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input asp-for="Input.Title" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Type</label>
+        <input asp-for="Input.Description" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Status</label>
+        <select asp-for="Input.Status" class="form-select">
+            <option>New</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+            <option>On Hold</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Assigned To</label>
+        <input asp-for="Input.AssignedTo" class="form-control" />
+    </div>
+
+    <button class="btn btn-primary">Create</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+</form>
