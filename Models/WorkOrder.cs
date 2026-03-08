@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CanopyViewer.Models
 {
@@ -16,5 +17,7 @@ namespace CanopyViewer.Models
         public string CreatedBy { get; set; } = string.Empty;
         public string? AssignedTo { get; set; }
         public int? AssetId { get; set; }
+        [ForeignKey("AssetId")]
+        public virtual Asset? Asset { get; set; }
     }
 }

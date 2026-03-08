@@ -1,14 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using CanopyViewer.Data;
 using CanopyViewer.Models;
 
 namespace CanopyViewer.Pages.Assets
 {
     public class DetailsModel : PageModel
     {
-        public Asset asset { get; set; } = new();
-        public void OnGet(int id)
-        { }
+        private readonly AppDbContext _db;
+        public DetailsModel(AppDbContext db) => _db = db;
+        public Asset Asset { get; set; } = new();
+        public async Task<IActionResult> OnGetAsync(int id)
+        {
+            var asset = await _db.Assets
+                .Include(a => a.WorkOrders)
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (asset == null) return NotFound();
+
+            Asset = asset;
+            return Page();
+        }
     }
 }

@@ -7,14 +7,17 @@
 <h2>New Asset</h2>
 
 <form method="post">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
     <div class="mb-3">
         <label class="form-label">Name</label>
         <input asp-for="Input.Name" class="form-control" />
+        <span asp-validation-for="Input.Name" class="text-danger small"></span>
     </div>
 
     <div class="mb-3">
         <label class="form-label">Type</label>
         <input asp-for="Input.Type" class="form-control" />
+        <span asp-validation-for="Input.Type" class="text-danger small"></span>
     </div>
 
     <div class="mb-3">
@@ -25,6 +28,32 @@
         </select>
     </div>
 
+    <div class="mb-3">
+        <label class="form-label">Location</label>
+        <input asp-for="Input.Location" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea asp-for="Input.Description" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Created By</label>
+        <textarea asp-for="Input.CreatedBy" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Created Date</label>
+        <textarea asp-for="Input.CreatedDate" class="form-control" rows="3"></textarea>
+    </div>
+
     <button class="btn btn-primary">Create</button>
     <a asp-page="Index" class="btn btn-secondary">Cancel</a>
 </form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

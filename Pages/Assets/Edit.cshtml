@@ -1,4 +1,64 @@
 ﻿@page
 @model CanopyViewer.Pages.Assets.EditModel
 @{
+    ViewData["Title"] = "Edit Asset";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Edit Asset</h2>
+    <a asp-page="Details" asp-route-id="@Model.Input.Id"
+       class="btn btn-secondary">← Back</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post">
+            <input type="hidden" asp-for="Input.Id" />
+            <input type="hidden" asp-for="Input.CreatedBy" />
+            <input type="hidden" asp-for="Input.CreatedDate" />
+
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <div class="mb-3">
+                <label class="form-label">Name <span class="text-danger">*</span></label>
+                <input asp-for="Input.Name" class="form-control" />
+                <span asp-validation-for="Input.Name" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Type</label>
+                <input asp-for="Input.Type" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Status</label>
+                <select asp-for="Input.Status" class="form-select">
+                    <option>Active</option>
+                    <option>Inactive</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Location</label>
+                <input asp-for="Input.Location" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Description</label>
+                <textarea asp-for="Input.Description" class="form-control" rows="3"></textarea>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a asp-page="Details" asp-route-id="@Model.Input.Id"
+                   class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
