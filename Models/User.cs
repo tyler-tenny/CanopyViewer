@@ -6,6 +6,12 @@
         public string Username { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
         public string Role { get; set; } = "Viewer";
+
+        public virtual ICollection<WorkOrder> AssignedWorkOrders { get; set; }
+             = new List<WorkOrder>();
+
+        public virtual ICollection<WorkOrder> AssignedByWorkOrders { get; set; }
+             = new List<WorkOrder>();
     }
 
     public static class Role

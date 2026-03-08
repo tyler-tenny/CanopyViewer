@@ -16,5 +16,18 @@ namespace CanopyViewer.Data
             optionsBuilder.LogTo(Console.WriteLine,
                 Microsoft.Extensions.Logging.LogLevel.Information);
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<WorkOrder>()
+                .HasOne(w => w.AssignedTo)
+                .WithMany(u => u.AssignedWorkOrders)
+                .HasForeignKey(w => w.AssignedToId)
+                .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<WorkOrder>()
+                .HasOne(w => w.AssignedBy)
+                .WithMany(u => u.AssignedByWorkOrders)
+                .HasForeignKey(w => w.AssignedById)
+                .OnDelete(DeleteBehavior.SetNull);
+        }
     }
 }

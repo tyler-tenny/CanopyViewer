@@ -86,7 +86,7 @@
                                         _             => "bg-light text-dark"
                                     })">@wo.Status</span>
                                 </td>
-                                <td>@(wo.AssignedTo ?? "Unassigned")</td>
+                                <td>@(wo.AssignedTo?.Username ?? "Unassigned")</td>
                                 <td>@wo.CreatedDate.ToString("MM/dd/yyyy")</td>
                             </tr>
                         }

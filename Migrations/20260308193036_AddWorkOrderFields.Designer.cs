@@ -3,6 +3,7 @@ using System;
 using CanopyViewer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CanopyViewer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260308193036_AddWorkOrderFields")]
+    partial class AddWorkOrderFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -95,11 +98,11 @@ namespace CanopyViewer.Migrations
                     b.Property<int?>("AssetId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("AssignedById")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("AssignedBy")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int?>("AssignedToId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("AssignedTo")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -145,10 +148,6 @@ namespace CanopyViewer.Migrations
 
                     b.HasIndex("AssetId");
 
-                    b.HasIndex("AssignedById");
-
-                    b.HasIndex("AssignedToId");
-
                     b.ToTable("WorkOrders");
                 });
 
@@ -158,33 +157,12 @@ namespace CanopyViewer.Migrations
                         .WithMany("WorkOrders")
                         .HasForeignKey("AssetId");
 
-                    b.HasOne("CanopyViewer.Models.User", "AssignedBy")
-                        .WithMany("AssignedByWorkOrders")
-                        .HasForeignKey("AssignedById")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("CanopyViewer.Models.User", "AssignedTo")
-                        .WithMany("AssignedWorkOrders")
-                        .HasForeignKey("AssignedToId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.Navigation("Asset");
-
-                    b.Navigation("AssignedBy");
-
-                    b.Navigation("AssignedTo");
                 });
 
             modelBuilder.Entity("CanopyViewer.Models.Asset", b =>
                 {
                     b.Navigation("WorkOrders");
-                });
-
-            modelBuilder.Entity("CanopyViewer.Models.User", b =>
-                {
-                    b.Navigation("AssignedByWorkOrders");
-
-                    b.Navigation("AssignedWorkOrders");
                 });
 #pragma warning restore 612, 618
         }
