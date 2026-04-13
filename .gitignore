@@ -4,6 +4,13 @@
 
 /.vs
 /obj
-/bin/Debug/net8.0
-/CanopyViewer.csproj.user
-/appsettings.Development.json
+/bin/
+*.user
+appsettings.Development.json
+
+*.db
+*.db-shm
+*.db-wal
+
+.DS_Store
+Thumbs.db

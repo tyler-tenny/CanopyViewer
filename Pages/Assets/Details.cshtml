@@ -74,7 +74,7 @@
                        .OrderByDescending(w => w.CreatedDate))
                         {
                             <tr style="cursor:pointer"
-                                onclick="window.location='/WorkOrders/Details?id=@wo.Id'">
+                                onclick="window.location='/WorkOrders/Details/@wo.Id'">
                                 <td>@wo.Id</td>
                                 <td>@wo.Title</td>
                                 <td>

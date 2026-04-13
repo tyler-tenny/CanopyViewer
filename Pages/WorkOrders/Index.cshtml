@@ -64,7 +64,7 @@
                     <th>Linked Asset</th>
                     <th>
                         <a href="@Model.SortLink("CreatedDate")" class="text-decoration-none text-dark">
-                            Id<i class="@Model.SortIcon("CreatedDate")"></i>
+                            Created Date<i class="@Model.SortIcon("CreatedDate")"></i>
                         </a>
                     </th>
                     <th>Actions</th>
@@ -83,7 +83,7 @@
                 @foreach (var wo in Model.WorkOrders)
                 {
                     <tr style="cursor:pointer"
-                        onclick="window.location='/WorkOrders/Details?id=@wo.Id'">
+                        onclick="window.location='/WorkOrders/Details/@wo.Id'">
                         <td>@wo.Id</td>
                         <td>@wo.Title</td>
                         <td>

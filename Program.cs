@@ -28,6 +28,7 @@ builder.Services.AddAuthorization(options =>
     .Build();
 });
 
+builder.Services.AddHostedService<RecurringWorkOrderService>();
 var app = builder.Build();
 
 // Test users for logins

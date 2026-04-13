@@ -1,16 +1,103 @@
 ﻿@page "{id:int}"
 @model CanopyViewer.Pages.WorkOrders.DetailsModel
 @{
-    ViewData["Title"] = "WorkOrder Details";
+    ViewData["Title"] = Model.WorkOrder.Title;
 }
 
-<h2>@Model.workOrder.Title</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>@Model.WorkOrder.Title</h2>
+    <div>
+        <a asp-page="Edit" asp-route-id="@Model.WorkOrder.Id"
+           class="btn btn-outline-secondary">Edit</a>
+        <a asp-page="Index" class="btn btn-secondary ms-2">← Back</a>
+    </div>
+</div>
 
-<ul class="list-group mb-3">
-    <li class="list-group-item"><strong>Status:</strong> @Model.workOrder.Status</li>
-    <li class="list-group-item"><strong>Assigned To:</strong> @Model.workOrder.AssignedTo</li>
-    <li class="list-group-item"><strong>Description:</strong> @Model.workOrder.Description</li>
-</ul>
+<div class="card mb-4">
+    <div class="card-header">Work Order Details</div>
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-3">ID</dt>
+            <dd class="col-sm-9">@Model.WorkOrder.Id</dd>
 
-<a asp-page="Edit" asp-route-id="@Model.workOrder.Id" class="btn btn-primary">Edit</a>
-<a asp-page="Index" class="btn btn-secondary">Back</a>
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">
+                <span class="badge @(Model.WorkOrder.Status switch {
+                    "New"         => "bg-primary",
+                    "In Progress" => "bg-warning text-dark",
+                    "On Hold"     => "bg-secondary",
+                    "Completed"   => "bg-success",
+                    _             => "bg-light text-dark"
+                })">@Model.WorkOrder.Status</span>
+            </dd>
+
+            <dt class="col-sm-3">Linked Asset</dt>
+            <dd class="col-sm-9">
+                @if (Model.WorkOrder.Asset != null)
+                {
+                    <a asp-page="/Assets/Details" asp-route-id="@Model.WorkOrder.AssetId">
+                        @Model.WorkOrder.Asset.Name
+                    </a>
+                }
+                else
+                {
+                    <span class="text-muted">—</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">
+                @(Model.WorkOrder.Description is { Length: > 0 }
+                    ? Model.WorkOrder.Description : "—")
+            </dd>
+
+            <dt class="col-sm-3">Action Taken</dt>
+            <dd class="col-sm-9">
+                @(Model.WorkOrder.ActionTaken is { Length: > 0 }
+                    ? Model.WorkOrder.ActionTaken : "—")
+            </dd>
+
+            <dt class="col-sm-3">Assigned By</dt>
+            <dd class="col-sm-9">@(Model.WorkOrder.AssignedBy?.Username ?? "—")</dd>
+
+            <dt class="col-sm-3">Assigned To</dt>
+            <dd class="col-sm-9">@(Model.WorkOrder.AssignedTo?.Username ?? "Unassigned")</dd>
+
+            @if (Model.WorkOrder.RecurrenceType == "Recurring")
+            {
+                <dt class="col-sm-3">Recurrence</dt>
+                <dd class="col-sm-9">@Model.WorkOrder.RecurrenceInterval</dd>
+
+                <dt class="col-sm-3">Next Occurrence</dt>
+                <dd class="col-sm-9">
+                    @(Model.WorkOrder.NextOccurrence?.ToString("MM/dd/yyyy HH:mm") ?? "—")
+                </dd>
+
+                <dt class="col-sm-3">Remaining Count</dt>
+                <dd class="col-sm-9">
+                    @(Model.WorkOrder.RecurCount.HasValue
+                        ? Model.WorkOrder.RecurCount.ToString()
+                        : "Indefinite")
+                </dd>
+            }
+        </dl>
+    </div>
+</div>
+
+@if (Model.WorkOrder.Asset != null)
+{
+    <div class="card mb-4">
+        <div class="card-header">Linked Asset</div>
+        <div class="card-body">
+            <a asp-page="/Assets/Details" asp-route-id="@Model.WorkOrder.AssetId"
+               class="btn btn-outline-primary btn-sm">
+                View @Model.WorkOrder.Asset.Name
+            </a>
+        </div>
+    </div>
+}
+
+<div class="text-muted small mt-3 d-flex justify-content-between px-2">
+    <span>Created by: @Model.WorkOrder.CreatedBy</span>
+    <span>Created: @Model.WorkOrder.CreatedDate.ToString("MM/dd/yyyy")</span>
+</div>
