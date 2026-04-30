@@ -88,8 +88,8 @@
                 </select>
             </div>
 
-            <div id="recurringFields" style="display:none">
-                <div class="card bg-light mb-3">
+            <div id="recurringFields">
+                <div id="recurringCard" class="card bg-light mb-3" style="display:none">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-4 mb-3">
@@ -131,7 +131,11 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+        console.log("script loaded");
         $('#assignedBySelect').select2({
             theme: 'bootstrap-5',
             placeholder: 'Search users...',
@@ -144,10 +148,10 @@
         });
 
         const recurrenceSelect = document.getElementById('recurrenceType');
-        const recurringFields = document.getElementById('recurringFields');
+        const recurringCard = document.getElementById('recurringCard');
 
         function toggleRecurring() {
-            recurringFields.style.display =
+            recurringCard.style.display =
                 recurrenceSelect.value === 'Recurring' ? 'block' : 'none';
         }
 
