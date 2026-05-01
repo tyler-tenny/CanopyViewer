@@ -23,6 +23,8 @@ namespace CanopyViewer.Pages.Admin.Users
             
             Input.Username = user.Username;
             Input.Role = user.Role;
+            Input.Email = user.Email;
+            Input.NotifyOnNewWorkOrder = user.NotifyOnNewWorkOrder;
 
             return Page();
         }
@@ -59,7 +61,10 @@ namespace CanopyViewer.Pages.Admin.Users
             }
 
             user.Username = Input.Username;
+            user.Email = Input.Email;
+            user.NotifyOnNewWorkOrder = Input.NotifyOnNewWorkOrder;
             if (Input.Role != user.Role && Input.Role != string.Empty && ModelState.IsValid) user.Role = Input.Role;
+
             _db.SaveChanges();
             return RedirectToPage("Index");
         }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using CanopyViewer.Models;
 using CanopyViewer.Data;
 using Microsoft.EntityFrameworkCore;
+using CanopyViewer.Services;
 
 namespace CanopyViewer.Pages.WorkOrders
 {
@@ -11,7 +12,13 @@ namespace CanopyViewer.Pages.WorkOrders
     public class CreateModel : PageModel
     {
         private readonly AppDbContext _db;
-        public CreateModel(AppDbContext db) => _db = db;
+        private readonly EmailService _emailService;
+        public CreateModel(AppDbContext db, EmailService emailService)
+        {
+            _db = db;
+            _emailService = emailService;
+        }
+
         [BindProperty]
         public WorkOrder Input { get; set; } = new();
         public List<Asset> Assets { get; set; } = new();
@@ -42,8 +49,6 @@ namespace CanopyViewer.Pages.WorkOrders
                 return Page();
             }
 
-            Input.CreatedDate = DateTime.UtcNow;
-
             if (Input.RecurrenceType == "Recurring" && Input.StartDate.HasValue)
                 Input.NextOccurrence = Input.StartDate;
 
@@ -54,8 +59,25 @@ namespace CanopyViewer.Pages.WorkOrders
             if (Input.NextOccurrence.HasValue)
                 Input.NextOccurrence = DateTime.SpecifyKind(Input.NextOccurrence.Value, DateTimeKind.Utc);
 
+            Input.CreatedDate = Input.StartDate.HasValue ? DateTime.SpecifyKind(Input.StartDate.Value, DateTimeKind.Utc) : DateTime.UtcNow;
+
             _db.WorkOrders.Add(Input);
             await _db.SaveChangesAsync();
+            
+            //Find users with email enabled and valid emails
+            var notifyUsers = await _db.Users
+                .Where(u => u.NotifyOnNewWorkOrder && u.Email != null)
+                .ToListAsync();
+
+            //send notifications
+            foreach (var user in notifyUsers)
+            {
+                await _emailService.SendWorkOrderNotificationAsync(
+                    user.Email!,
+                    user.Username,
+                    Input.Title,
+                    Input.Id);
+            }
 
             return RedirectToPage("Details", new { id = Input.Id });
         }

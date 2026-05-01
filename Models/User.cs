@@ -7,6 +7,9 @@
         public string PasswordHash { get; set; } = string.Empty;
         public string Role { get; set; } = "Viewer";
 
+        public string? Email { get; set; }
+        public bool NotifyOnNewWorkOrder { get; set; } = false;
+
         public virtual ICollection<WorkOrder> AssignedWorkOrders { get; set; }
              = new List<WorkOrder>();
 

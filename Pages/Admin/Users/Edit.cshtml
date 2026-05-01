@@ -1,39 +1,87 @@
 ﻿@page "{id:int}"
 @model CanopyViewer.Pages.Admin.Users.EditModel
 @{
+    ViewData["Title"] = "Edit User";
+}
 
+<div class="d-flex justify-content-between align-items-center mb-3">
     <h2>Edit User</h2>
+    <a asp-page="Index" class="btn btn-secondary">← Back</a>
+</div>
 
-    @if (!ModelState.IsValid)
-    {
-        <div class="alert alert-danger">
-            @foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-            {
-                <div>@error.ErrorMessage</div>
-            }
-        </div>
+<div class="card">
+    <div class="card-header">User Details</div>
+    <div class="card-body">
+        <form method="post">
+            <input type="hidden" asp-for="Input.Id" />
+
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Username</label>
+                <div class="col-sm-9">
+                    <input asp-for="Input.Username" class="form-control" />
+                    <span asp-validation-for="Input.Username" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">
+                    Password
+                    <span class="text-muted small d-block">Leave blank to keep current</span>
+                </label>
+                <div class="col-sm-9">
+                    <input asp-for="Input.Password" type="password" class="form-control" />
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Role</label>
+                <div class="col-sm-9">
+                    <select asp-for="Input.Role" class="form-select">
+                        <option>User</option>
+                        <option>Admin</option>
+                        <option>Viewer</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-9">
+                    <input asp-for="Input.Email" type="email" class="form-control"
+                           placeholder="user@example.com" />
+                    <span class="text-muted small">
+                        Required for email notifications
+                    </span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Notifications</label>
+                <div class="col-sm-9 d-flex align-items-center">
+                    <div class="form-check form-switch">
+                        <input asp-for="Input.NotifyOnNewWorkOrder"
+                               class="form-check-input" type="checkbox" role="switch" />
+                        <label class="form-check-label">
+                            Notify when a new work order is created
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-9 offset-sm-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
-    <form method="post">
-        <div>
-            <label>Username</label>
-            <input asp-for="Input.Username"/>
-        </div>
-
-        <div>
-            <label>Password (leave blank to keep current)</label>
-            <input asp-for="Input.Password" type ="password"/>
-        </div>
-
-        <div>
-            <label>Role</label>
-            <select asp-for="Input.Role">
-                <option>User</option>
-                <option>Admin</option>
-                <option>Viewer</option>
-            </select>
-        </div>
-
-        <button type="submit">Save</button>
-    </form>
 }

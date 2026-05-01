@@ -27,7 +27,7 @@ builder.Services.AddAuthorization(options =>
     .RequireAuthenticatedUser()
     .Build();
 });
-
+builder.Services.AddScoped<EmailService>();
 builder.Services.AddHostedService<RecurringWorkOrderService>();
 var app = builder.Build();
 
