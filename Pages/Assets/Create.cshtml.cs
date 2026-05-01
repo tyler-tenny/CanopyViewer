@@ -18,12 +18,12 @@ namespace CanopyViewer.Pages.Assets
         public void OnGet()
         {
             Input.CreatedBy = User.Identity?.Name ?? string.Empty;
-            Input.CreatedDate = DateTime.UtcNow;
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid) return Page();
+            Input.CreatedDate = DateTime.UtcNow;
 
             _db.Assets.Add(Input);
             await _db.SaveChangesAsync();

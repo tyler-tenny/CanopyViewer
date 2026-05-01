@@ -45,7 +45,7 @@
 
     <div class="mb-3">
         <label class="form-label">Created Date</label>
-        <textarea asp-for="Input.CreatedDate" class="form-control" rows="3"></textarea>
+        <input value="@DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm")" class="form-control" disabled rows="3"></input>
     </div>
 
     <button class="btn btn-primary">Create</button>

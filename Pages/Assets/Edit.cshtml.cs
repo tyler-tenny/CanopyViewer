@@ -27,6 +27,7 @@ namespace CanopyViewer.Pages.Assets
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid) return Page();
+
             _db.Attach(Input).State = EntityState.Modified;
             await _db.SaveChangesAsync();
             return RedirectToPage("Details", new { id = Input.Id });

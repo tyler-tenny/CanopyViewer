@@ -38,8 +38,8 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Created Date</label>
-                    <input asp-for="Input.CreatedDate" type="datetime-local"
-                           class="form-control" />
+                    <input value="@DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm")"
+                           class="form-control" disabled/>
                 </div>
             </div>
 

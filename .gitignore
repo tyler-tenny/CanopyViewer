@@ -7,6 +7,7 @@
 /bin/
 *.user
 appsettings.Development.json
+appsettings.json
 
 *.db
 *.db-shm

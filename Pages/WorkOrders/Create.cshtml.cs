@@ -22,7 +22,6 @@ namespace CanopyViewer.Pages.WorkOrders
             Users = await _db.Users.OrderBy(u => u.Username).ToListAsync();
 
             Input.CreatedBy = User.Identity?.Name ?? string.Empty;
-            Input.CreatedDate = DateTime.UtcNow;
             Input.Status = "New";
             Input.RecurrenceType = "One-Time";
 
@@ -43,8 +42,17 @@ namespace CanopyViewer.Pages.WorkOrders
                 return Page();
             }
 
+            Input.CreatedDate = DateTime.UtcNow;
+
             if (Input.RecurrenceType == "Recurring" && Input.StartDate.HasValue)
                 Input.NextOccurrence = Input.StartDate;
+
+            //Set UTC for Npgsql
+            if (Input.StartDate.HasValue)
+                Input.StartDate = DateTime.SpecifyKind(Input.StartDate.Value, DateTimeKind.Utc);
+
+            if (Input.NextOccurrence.HasValue)
+                Input.NextOccurrence = DateTime.SpecifyKind(Input.NextOccurrence.Value, DateTimeKind.Utc);
 
             _db.WorkOrders.Add(Input);
             await _db.SaveChangesAsync();

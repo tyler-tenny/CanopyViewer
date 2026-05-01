@@ -39,6 +39,12 @@ namespace CanopyViewer.Pages.WorkOrders
                 return Page();
             }
 
+            if (Input.StartDate.HasValue)
+                Input.StartDate = DateTime.SpecifyKind(Input.StartDate.Value, DateTimeKind.Utc);
+
+            if (Input.NextOccurrence.HasValue)
+                Input.NextOccurrence = DateTime.SpecifyKind(Input.NextOccurrence.Value, DateTimeKind.Utc);
+
             _db.Attach(Input).State = EntityState.Modified;
             await _db.SaveChangesAsync();
 
