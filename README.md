@@ -35,7 +35,7 @@ My senior project for the Software Engineering program at Oregon Institute of Te
 - `wwwroot/` — Static assets (CSS, JavaScript)
 
 ## Work-In-Progress
-- Email notifications
+- Email notifications ✅
 - Reporting and export functionality
 - Bulk asset import
 - Change database to PostgreSQL ✅ 
