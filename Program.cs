@@ -11,10 +11,16 @@ var builder = WebApplication.CreateBuilder(args);
 var rawConnection = Environment.GetEnvironmentVariable("CANOPYVIEWER_DB") ?? builder.Configuration.GetConnectionString("Default");
 
 var connectionString = rawConnection;
-if(rawConnection != null && rawConnection.StartsWith("postgresql://"))
+if (rawConnection != null && rawConnection.StartsWith("postgresql://"))
 {
     var uri = new Uri(rawConnection);
+    Console.WriteLine($"Host: {uri.Host}");
+    Console.WriteLine($"Port: {uri.Port}");
+    Console.WriteLine($"Path: {uri.AbsolutePath}");
+    Console.WriteLine($"UserInfo: {uri.UserInfo}");
+
     connectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={uri.UserInfo.Split(':')[0]};Password={uri.UserInfo.Split(':')[1]};SslMode=Require";
+    Console.WriteLine($"Final connection string: {connectionString}");
 }
 
 // Add services to the container.
