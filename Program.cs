@@ -24,6 +24,7 @@ Console.WriteLine(username);
 Console.WriteLine(password);
 
 connectionString = $"Host={host};Port={port};Database={database};Username={username};Password={password};SslMode=Require";
+Console.WriteLine(connectionString);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
