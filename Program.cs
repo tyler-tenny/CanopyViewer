@@ -6,7 +6,17 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = Environment.GetEnvironmentVariable("CANOPYVIEWER_DB") ?? builder.Configuration.GetConnectionString("Default");
+
+//parse URL format for connection string to key-value if needed
+var rawConnection = Environment.GetEnvironmentVariable("CANOPYVIEWER_DB") ?? builder.Configuration.GetConnectionString("Default");
+
+var connectionString = rawConnection;
+if(rawConnection != null && rawConnection.StartsWith("postgresql://"))
+{
+    var uri = new Uri(rawConnection);
+    connectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={uri.UserInfo.Split(':')[0]};Password={uri.UserInfo.Split(':')[1]};SslMode=Require";
+}
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<AppDbContext>(options =>
