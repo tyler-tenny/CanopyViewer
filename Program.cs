@@ -9,26 +9,22 @@ using System;
 var builder = WebApplication.CreateBuilder(args);
 
 //use env variables to build connection string
-var connectionString = Environment.GetEnvironmentVariable("CANOPYVIEWER_DB");
-if (string.IsNullOrEmpty(connectionString))
-{
-    var host = Environment.GetEnvironmentVariable("PGHOST");
-    var port = Environment.GetEnvironmentVariable("PGPORT") ?? "5432";
-    var database = Environment.GetEnvironmentVariable("PGDATABASE");
-    var username = Environment.GetEnvironmentVariable("PGUSER");
-    var password = Environment.GetEnvironmentVariable("PGPASSWORD");
+string connectionString;
 
-    Console.WriteLine(host);
-    Console.WriteLine(port);
-    Console.WriteLine(database);
-    Console.WriteLine(username);
-    Console.WriteLine(password);
+var host = Environment.GetEnvironmentVariable("PGHOST");
+var port = Environment.GetEnvironmentVariable("PGPORT") ?? "5432";
+var database = Environment.GetEnvironmentVariable("PGDATABASE");
+var username = Environment.GetEnvironmentVariable("PGUSER");
+var password = Environment.GetEnvironmentVariable("PGPASSWORD");
 
-    if (!string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(database))
-    {
-        connectionString = $"Host={host};Port={port};Database={database};Username={username};Password={password};SslMode=Require";
-    }
-}
+Console.WriteLine(host);
+Console.WriteLine(port);
+Console.WriteLine(database);
+Console.WriteLine(username);
+Console.WriteLine(password);
+
+connectionString = $"Host={host};Port={port};Database={database};Username={username};Password={password};SslMode=Require";
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<AppDbContext>(options =>
