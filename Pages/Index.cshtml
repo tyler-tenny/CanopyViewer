@@ -1,15 +1,159 @@
 ﻿@page
-@model IndexModel
+@model CanopyViewer.Pages.IndexModel
+@using CanopyViewer.Models
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <h1>CanopyViewer System Prototype</h1>
-    <p>Server running in local development environment</p>
-    <p>User: @User.Identity?.Name</p>
-    <p>Is Authenticated: @User.Identity?.IsAuthenticated</p>
-    <p>Is Admin: @User.IsInRole(CanopyViewer.Models.Role.Admin)</p>
-    <p>User ID: @int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);</p>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="mb-0">Dashboard</h2>
+        <span class="text-muted small">Welcome back, @User.Identity?.Name</span>
+    </div>
+    <a asp-page="/WorkOrders/Create" class="btn btn-primary">+ New Work Order</a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <div class="display-6 fw-bold text-primary">
+                    @Model.AssignedToMe.Count
+                </div>
+                <div class="text-muted">Assigned to Me</div>
+            </div>
+            <div class="card-footer bg-transparent">
+                <a asp-page="/WorkOrders/Index" class="small">View all →</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <div class="display-6 fw-bold text-warning">
+                    @Model.OpenWorkOrders
+                </div>
+                <div class="text-muted">Open Work Orders</div>
+            </div>
+            <div class="card-footer bg-transparent">
+                <a asp-page="/WorkOrders/Index" class="small">View all →</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <div class="display-6 fw-bold @(Model.OverdueWorkOrders > 0
+                    ? "text-danger" : "text-success")">
+                    @Model.OverdueWorkOrders
+                </div>
+                <div class="text-muted">Overdue</div>
+            </div>
+            <div class="card-footer bg-transparent">
+                <a asp-page="/WorkOrders/Index" class="small">View all →</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Assigned to Me</span>
+        <span class="badge bg-primary">@Model.AssignedToMe.Count open</span>
+    </div>
+    @if (!Model.AssignedToMe.Any())
+    {
+        <div class="card-body text-muted">
+            No work orders currently assigned to you.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Asset</th>
+                        <th>Scheduled</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var wo in Model.AssignedToMe)
+                    {
+                        <tr style="cursor:pointer"
+                            onclick="window.location='/WorkOrders/Details/@wo.Id'">
+                            <td>@wo.Id</td>
+                            <td>@wo.Title</td>
+                            <td>
+                                <span class="badge @(wo.Status switch {
+                                    "New"         => "bg-primary",
+                                    "In Progress" => "bg-warning text-dark",
+                                    "On Hold"     => "bg-secondary",
+                                    "Completed"   => "bg-success",
+                                    _             => "bg-light text-dark"
+                                })">@wo.Status</span>
+                            </td>
+                            <td>@(wo.Asset?.Name ?? "—")</td>
+                            <td>
+                                    <span class="text-muted">—</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Recently Created by Me</span>
+        <span class="text-muted small">Last 10</span>
+    </div>
+    @if (!Model.CreatedByMe.Any())
+    {
+        <div class="card-body text-muted">
+            You haven't created any work orders yet.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Asset</th>
+                        <th>Created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var wo in Model.CreatedByMe)
+                    {
+                        <tr style="cursor:pointer"
+                            onclick="window.location='/WorkOrders/Details/@wo.Id'">
+                            <td>@wo.Id</td>
+                            <td>@wo.Title</td>
+                            <td>
+                                <span class="badge @(wo.Status switch {
+                                    "New"         => "bg-primary",
+                                    "In Progress" => "bg-warning text-dark",
+                                    "On Hold"     => "bg-secondary",
+                                    "Completed"   => "bg-success",
+                                    _             => "bg-light text-dark"
+                                })">@wo.Status</span>
+                            </td>
+                            <td>@(wo.Asset?.Name ?? "—")</td>
+                            <td>@wo.CreatedDate.ToString("MM/dd/yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
 </div>

@@ -67,7 +67,7 @@
                 @foreach (var asset in Model.Assets)
                 {
                     <tr style="cursor:pointer"
-                        onclick="window.location='./Assets/Details?id=@asset.Id'">
+                        onclick="window.location='/Assets/Details/@asset.Id'">
                         <td>@asset.Id</td>
                         <td>@asset.Name</td>
                         <td>@asset.Type</td>

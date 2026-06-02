@@ -36,7 +36,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-    if (db.Users.Count() != 2)
+    if (db.Users.Count() <= 2)
     {
         db.Users.Add(new User
         {

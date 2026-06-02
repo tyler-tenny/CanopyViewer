@@ -5,7 +5,7 @@ using MimeKit;
 
 namespace CanopyViewer.Services
 {
-    //This service handles sending email notifications for new work orders to configured users.
+    //This service handles sending email notifications for new work orders to configured users
     public class EmailService
     {
         private readonly IConfiguration _config;

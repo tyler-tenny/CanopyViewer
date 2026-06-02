@@ -10,7 +10,7 @@ namespace CanopyViewer.Pages.Assets
     {
         private readonly AppDbContext _db;
         public DetailsModel(AppDbContext db) => _db = db;
-        public Asset Asset { get; set; } = new();
+        public Asset Asset { get; set; } = null!;
         public async Task<IActionResult> OnGetAsync(int id)
         {
             var asset = await _db.Assets

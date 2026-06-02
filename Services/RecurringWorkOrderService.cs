@@ -4,7 +4,7 @@ using CanopyViewer.Models;
 
 namespace CanopyViewer.Services
 {
-    //This service tracks recurrence as a background task.
+    //This service tracks recurrence as a background task
     public class RecurringWorkOrderService : BackgroundService
     {
         private readonly IServiceScopeFactory _scopeFactory;
