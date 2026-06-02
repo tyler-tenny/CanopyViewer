@@ -7,22 +7,21 @@ using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//parse URL format for connection string to key-value if needed
-var rawConnection = Environment.GetEnvironmentVariable("CANOPYVIEWER_DB") ?? builder.Configuration.GetConnectionString("Default");
-
-var connectionString = rawConnection;
-if (rawConnection != null && rawConnection.StartsWith("postgresql://"))
+//use env variables to build connection string
+var connectionString = Environment.GetEnvironmentVariable("CANOPYVIEWER_DB");
+if (string.IsNullOrEmpty(connectionString))
 {
-    var uri = new Uri(rawConnection);
-    Console.WriteLine($"Host: {uri.Host}");
-    Console.WriteLine($"Port: {uri.Port}");
-    Console.WriteLine($"Path: {uri.AbsolutePath}");
-    Console.WriteLine($"UserInfo: {uri.UserInfo}");
+    var host = Environment.GetEnvironmentVariable("PGHOST");
+    var port = Environment.GetEnvironmentVariable("PGPORT") ?? "5432";
+    var database = Environment.GetEnvironmentVariable("PGDATABASE");
+    var username = Environment.GetEnvironmentVariable("PGUSER");
+    var password = Environment.GetEnvironmentVariable("PGPASSWORD");
 
-    connectionString = $"Host={uri.Host};Port={uri.Port};Database={uri.AbsolutePath.TrimStart('/')};Username={uri.UserInfo.Split(':')[0]};Password={uri.UserInfo.Split(':')[1]};SslMode=Require";
-    Console.WriteLine($"Final connection string: {connectionString}");
+    if (!string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(database))
+    {
+        connectionString = $"Host={host};Port={port};Database={database};Username={username};Password={password};SslMode=Require";
+    }
 }
-
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<AppDbContext>(options =>
