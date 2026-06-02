@@ -4,6 +4,7 @@ using CanopyViewer.Models;
 using CanopyViewer.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,12 @@ if (string.IsNullOrEmpty(connectionString))
     var database = Environment.GetEnvironmentVariable("PGDATABASE");
     var username = Environment.GetEnvironmentVariable("PGUSER");
     var password = Environment.GetEnvironmentVariable("PGPASSWORD");
+
+    Console.WriteLine(host);
+    Console.WriteLine(port);
+    Console.WriteLine(database);
+    Console.WriteLine(username);
+    Console.WriteLine(password);
 
     if (!string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(database))
     {
